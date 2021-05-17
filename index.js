@@ -1,29 +1,32 @@
-const http = require('http');
-const fs = require('fs');
-const url = require('url');
+const express = require('express');
+const app = express();
+const path = require('path');
+const router = express.Router();
 
-const pageErr = fs.readFileSync('./404.html', (err, data) => {
-  if (err) throw err;
-  return data;
+const port = process.env.port || 3000;
+
+router.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '/index.html'));
 });
 
-http
-  .createServer((req, res) => {
-    let q = url.parse(req.url, true);
-    let filename = '.' + q.pathname;
-    if (filename === './') {
-      filename = './index.html';
-    }
+router.get('/index', (req, res) => {
+  res.sendFile(path.join(__dirname, '/index.html'));
+});
 
-    fs.readFile(filename, (err, data) => {
-      if (err) {
-        res.write(pageErr);
-        return res.end();
-      }
+router.get('/about', (req, res) => {
+  res.sendFile(path.join(__dirname, '/about.html'));
+});
 
-      res.writeHead(200, { 'Content-Type': 'text/html' });
-      res.write(data);
-      return res.end();
-    });
-  })
-  .listen(8080);
+router.get('/contact', (req, res) => {
+  res.sendFile(path.join(__dirname, '/contact.html'));
+});
+
+app.use('/', router);
+
+app.use('*', (req, res, next) => {
+  res.status(404).send('<h1>404 Page Not Found</h1> ¯_(ツ)_/¯');
+});
+
+app.listen(port, () => {
+  console.log('Up and running!');
+});
