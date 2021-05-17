@@ -24,7 +24,7 @@ router.get('/contact', (req, res) => {
 app.use('/', router);
 
 app.use('*', (req, res, next) => {
-  res.status(404).send('<h1>404 Page Not Found</h1> ¯_(ツ)_/¯');
+  res.status(404).send('<h1>404 Page Not Found</h1> ¯\\_(ツ)_/¯');
 });
 
 app.listen(port, () => {
